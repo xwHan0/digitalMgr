@@ -1,6 +1,6 @@
 
 from module import Module
-from ulity import ecc_width, bit_width
+from utility import ecc_width, bit_width
 
 class Memory(Module):
     def __init__(self, name, width=1, depth=1, **args):
