@@ -53,10 +53,15 @@ class ReadModifyWrite(Access):
 
 
 class Data:
-    def __init__(self, name, summary='', depth=1, **args):
+    """
+    # Arguement:
+        chk {None|'ecc'|'parity'}
+    """
+    def __init__(self, name, summary='', depth=1, num=1, **args):
         self.name = name
         self.summary = summary
         self.dep = depth
+        self.num = 1
         self.scenarios = []
         self.access = []
         self.args = args
@@ -78,6 +83,12 @@ class Data:
         elif isinstance(self.dep, str):
             return self.args.get(self.dep, 1)
 
+    def number(self, params_map={}):
+        if isinstance(self.num, int):
+            return self.num
+        elif isinstance(self.num, str):
+            return self.args.get(self.num, 1)
+
     def bits(self, params_map={}):
         return self.width(params_map) * self.depth(params_map)
 
@@ -90,7 +101,7 @@ class Data:
         return sum( *map( lambda a: a.rate, acc ) ) * speed_up
 
 
-class RA(Data):
+class REG(Data):
     def __init__(self, name, summary='', depth=1, **args):
         super().__init__(name, summary, depth, **args)
 
@@ -117,7 +128,7 @@ __all__ = [
     'Write',
     'Read',
     'ReadModifyWrite',
-    'RA',
+    'REG',
     'SP',
     'TP',
     'DP',
