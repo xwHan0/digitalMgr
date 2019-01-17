@@ -1,6 +1,7 @@
 
 from utility import ecc_width
 from math import ceil
+from module import Module
 
 def get_int_param(param, params_map):
     if isinstance(param, int):
@@ -21,9 +22,14 @@ class Field:
     def width(self, params_map={}):
         return get_int_param(self.wid, params_map)
       
+    def __repr__(self):
+        r = ''
+        r += '{0: <20} {1:>8} {2:>8} {3}\n'.format(self.name, self.width, self.default, self.summary)
+        return r
+      
 
 class Table:
-    def __init__(self, name, summary='', fields=[], depth=1, **args):
+    def __init__(self, name='', summary='', fields=[], depth=1, **args):
         self.name = ''
         self.summary = summary
         self.fields = fields
@@ -69,7 +75,13 @@ class Table:
         acc = filter(lambda a: isinstance(a, [Write, ReadModifyWrite]), self.access)
         return sum( *map( lambda a: a.rate, acc ) ) * speed_up
 
-
+    def __repr__(self):
+        r = '================================================\n'
+        r += 'Name: {0}        | Num: {1}\n'.format(self.name, self.num)
+        r += '{0}\n'.format(self.summary)
+        for f in self.fields:
+            r += f.__repr__()
+        return r
 
 
 class Access:
@@ -93,7 +105,7 @@ class ReadModifyWrite(Access):
         super().__init__(summary, rate)
 
 
-class Data:
+class Data(Module):
     """
     # Arguement:
         chk {None|'ecc'|'parity'}
@@ -102,9 +114,7 @@ class Data:
         self.name = name
         self.summary = summary
         self.dep = depth
-        self.num = 1
-        self.scenarios = []
-        self.access = []
+        self.num = num
         self.args = args
         
         self.tbls = [Table(depth=depth, **args)]
@@ -119,14 +129,17 @@ class Data:
             self.tbls.append(Table(name, summary=summary, depth=depth, **self.args)))
             return self
 
-    def append_field(self, *field, tbl=0):
-        for f in field:
-            self.tbls[tbl].append(f)
-        return self
+    def append_field(self, *field, name='', width=0, description='', default=0, tbl=0):
+        if len(field) > 0:
+            for f in field:
+                self.tbls[tbl].append_field(f)
+            return self
+        else:
+            self.tbls[tbl].append_field(Field(name,width,description,default))
         
-    def append_access(self, *access):
+    def append_access(self, *access, tbl=0):
         for a in access:
-            self.access.append(a)
+            self.access[tbl].append_access(a)
         return self
 
 
@@ -156,7 +169,18 @@ class Data:
     def bits(self, params_map={}):
         return self.width(params_map) * self.depth(params_map)
 
-    
+    def summary(self, params_map={}):
+        r = ''
+        r += '{0:<30} {1:<3} {2:<4} '.format(self.name, self.typ, self.access_bandwidth())
+        r += '{0:>8} {1:>3}'.format(self.depth(params_map), self.number(params_map))
+        return r
+
+    def __repr__(self):
+        r = '================================================\n'
+        r += 'Name: {0}        | Num: {1}\n'.format(self.name, self.num)
+        r += '{0}\n'.format(self.summary)
+        return r
+        
 
 class REG(Data):
     def __init__(self, name, summary='', depth=1, **args):
