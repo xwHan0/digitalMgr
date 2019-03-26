@@ -126,7 +126,7 @@ class Data(Module):
             return self
         else:
             depth = depth if depth else self.dep
-            self.tbls.append(Table(name, summary=summary, depth=depth, **self.args)))
+            self.tbls.append(Table(name, summary=summary, depth=depth, **self.args))
             return self
 
     def append_field(self, *field, name='', width=0, description='', default=0, tbl=0):
@@ -205,7 +205,7 @@ class DP(Data):
 
 __all__ = [
     'Field',
-    'Scenario',
+    'Table',
     'Write',
     'Read',
     'ReadModifyWrite',
