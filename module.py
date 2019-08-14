@@ -8,7 +8,7 @@ class Module:
     def _mux_(self): return 0
     def _gates_(self): return 0
     def _memory_(self): return 0
-    def _toggle_rate(_(self): return 0
+    def _toggle_rate_(self): return 0
         
         
     def registers(self): pass
