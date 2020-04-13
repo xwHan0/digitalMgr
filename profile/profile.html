@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/basic.css">
+    <script src="../highlight/highlight.pack.js"></script>
+    <link rel="stylesheet" type="text/css" href="../highlight/styles/a11y-dark.css">
+    <script >hljs.initHighlightingOnLoad();</script> 
+  </head>
+  <body>
+    
+    <h1>Introduce</h1>
+    <p>模板方法可以有效减少逻辑表项资源和软件配置量。</p>
+
+    <h2>CODE</h2>
+    <p>模板化后的配置查找行为:</p>
+    <pre><code>
+var get_configure = function(keys, profiles, configure){
+    let idx = reduce( (idx, key, profile) => {idx+profile[key]}, keys, profiles, 0 )
+    return configure[idx]
+}
+    </code></pre>
+    
+  </body>
+</html>

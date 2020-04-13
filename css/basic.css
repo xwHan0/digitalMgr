@@ -1,0 +1,65 @@
+body {
+    font-family : 'Times New Roman'; 
+    /* font-family: Arial, sans-serif; */
+    font-size : 16px;
+    counter-reset: chapter section subsec;  /*设置计数器，为多级标题计数*/
+}
+
+h1 {
+    counter-reset: section subsec;      /*重新开始子标题计数器*/
+}
+h1:before{
+    /*递增计数器，并设置计数显示格式*/
+    counter-increment: chapter;
+    content: counter(chapter)" ";
+}
+
+h2 {
+    counter-reset: subsec;  /*重新开始子标题计数器*/
+}
+h2:before {
+    counter-increment: section;
+    content: counter(chapter)"."counter(section)" "
+}
+
+h3:before {
+    counter-increment: subsec;
+    content: counter(chapter)"."counter(section)"."counter(subsec)" "
+}
+
+h4 {
+    font-size: 24px;
+    color: #000000;
+    text-decoration:underline;
+    padding-bottom: 4px;
+    /* border-bottom: 1px solid #000000; */
+} 
+
+h6 {
+    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+table {
+    /* text-align: center; */
+    border-collapse:collapse;
+    border:none;
+}
+
+table td, table th{
+    margin: 1px;
+    border:solid #000 1px;
+}
+
+.note{
+    font-family: FangSong;
+}
+
+.principle{
+    font-family: FangSong;
+    color: red;
+    font-weight: bold;
+}
